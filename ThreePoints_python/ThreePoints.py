@@ -2,21 +2,13 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-# 读取数据
-""" 直接读取原始数据
-data = pd.read_csv('ThreePoints_Python\Filtereddata.csv', header=None, delimiter='\t')
-s1 = data.iloc[:, 1].values
-s2 = data.iloc[:, 2].values
-s3 = data.iloc[:, 3].values
-t = data.iloc[:, 0].values
-"""
-# 读取滤波后的数据
-df = pd.read_csv('ThreePoints_Python\Filtereddata.csv')
-s1 = df['数组1'].values
-s2 = df['数组2'].values
-s3 = df['数组3'].values
-# 定义基本参数
-rpm = 2400 # 转速
+# %%读取滤波后的数据
+df = pd.read_csv('ThreePoints_Python\Filtereddata8.csv')
+s1 = df['filtered_s1'].values
+s2 = df['filtered_s2'].values
+s3 = df['filtered_s3'].values
+# %%定义基本参数
+rpm = 6000 # 转速
 alpha = 90 # 探头12夹角
 beta = 90 # 探头34夹角
 c1 = 1
@@ -27,33 +19,34 @@ N = len(x) # 采样总点数
 fs = 2000.0 # 采样频率 Hz
 t_total = N/fs
 t = np.arange(0,t_total,t_total/N)
-
-# 计算频谱
+# %%绘制原始信号波形图
+plt.figure(1)
+plt.plot(t[0:1000],x[0:1000]) # 前1000条
+plt.xlabel('Time')
+plt.ylabel('Displacement')
+plt.title('Waveform')
+# %%计算频谱
 fft_x = np.fft.fft(x)
 freq = np.fft.fftfreq(N, d=1/fs)
 amp = np.abs(fft_x)
-
-# 选择感兴趣的频率范围
+# %%选择感兴趣的频率范围
 interest_freq_range = (0.01, 1000.0)  # 单位为Hz
 interest_freq_mask = (freq >= interest_freq_range[0]) & (freq <= interest_freq_range[1])
 freq_i = freq[interest_freq_mask]
 amp_i = amp[interest_freq_mask]
-
-# 找到最大幅值及对应的频率
+# %%找到最大幅值及对应的频率
 max_amp = np.max(amp_i)
 max_amp_freq = freq_i[np.argmax(amp_i)]
-
-# # 设置阈值分离同步误差和异步误差
-# threshold = 0.4# 幅值阈值
-# Sync = fft_x.copy()
-# Async = fft_x.copy()
-# for i in range(len(freq_i)):
-#     if amp_i[i] > threshold:
-#         Async[i] = 0
-#     else:
-#         Sync[i] = 0
-
-# 按转速基频倍频分离同步误差和异步误差
+# %%绘制原始信号频谱幅值谱
+plt.figure(2)
+# plt.stem(freq[:len(freq)//2], amp[:len(amp)//2])
+plt.stem(freq_i, amp_i)
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Amplitude')
+plt.title('Amplitude Spectrum')
+# plt.xlim(interest_freq_range)
+#'freq_i':freq_i,'amp_i':amp_i,
+# %%按转速基频倍频分离同步误差和异步误差
 bf = rpm/60 # 基频 Hz
 # bf_index = int(bf*(N/fs)) #转换成索引
 bf_index = np.where(freq == np.float64(bf))[0][0] #转换成索引
@@ -66,47 +59,28 @@ for i in range(len(freq_i)):
         Async[i] = 0
     else:
         Sync[i] = 0
-
-# 同步误差进一步分离圆度误差和偏心误差
+# %%同步误差进一步分离圆度误差和偏心误差
 Rod = Sync.copy()
 Pos = Sync.copy()
 Rod[bf_index] = 0 # 圆度误差，去掉第一项
 Pos[:bf_index-1] = 0
 Pos[bf_index+1:] = 0 # 偏心误差，保留第一项
-
-# 分离完的信号IFFT
+# %%分离完的信号IFFT
 Sync_sig = np.fft.ifft(Sync)
 Async_sig = np.fft.ifft(Async)
 Rod_sig = np.fft.ifft(Rod)
 Pos_sig = np.fft.ifft(Pos)
-
-# 分离完信号的频谱
+# %%分离完信号的频谱
 Sync_amp = np.abs(Sync)
 Async_amp = np.abs(Async)
 Rod_amp = np.abs(Rod)
 Pos_amp = np.abs(Pos)
-
-# 绘制原始信号波形图
-plt.figure(1)
-plt.plot(t[0:1000],x[0:1000]) # 前1000条
-plt.xlabel('Time')
-plt.ylabel('Displacement')
-plt.title('Waveform')
-
-# 原始信号频谱幅值谱
-plt.figure(2)
-# plt.stem(freq[:len(freq)//2], amp[:len(amp)//2])
-plt.stem(freq_i, amp_i)
-plt.xlabel('Frequency (Hz)')
-plt.ylabel('Amplitude')
-plt.title('Amplitude Spectrum')
-# plt.xlim(interest_freq_range)
-
+# %%误差绘图
+"""
 # 同步误差
 plt.figure(3)
 plt.plot(t[0:100],Sync_sig[0:100])
 plt.title('Sync')
-
 # 同步误差频谱
 plt.figure(4)
 plt.stem(freq_i, Sync_amp[interest_freq_mask])
@@ -165,9 +139,9 @@ ax3.set_title('Rod')
 ax4 = fig.add_subplot(224,projection='polar')
 ax4.plot(theta,Pos_sig[10:1010])
 ax4.set_title('Pos')
-
+"""
 plt.show()
 
-# 补：输出到文件
-df = pd.DataFrame({'x': x, 'Sync': Sync_sig, 'Async': Async_sig, 'Rod': Rod_sig, 'Pos':Pos_sig})
+# %%补：输出到文件
+df = pd.DataFrame({'x': x,'Sync': Sync_sig, 'Async': Async_sig, 'Rod': Rod_sig, 'Pos':Pos_sig})
 df.to_csv('ThreePoints_Python\Resultdata.csv', index=False)

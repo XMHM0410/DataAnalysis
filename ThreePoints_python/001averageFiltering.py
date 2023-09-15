@@ -2,7 +2,7 @@ from filterpy.kalman import KalmanFilter
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import seaborn as sns
 # 集合平均滤波参数
 window_size = 2 # 每3个数平均一次
 
@@ -15,7 +15,7 @@ def average_filter(data, window_size):
             filtered_data.append(sum(data[i-window_size+1:i+1]) / window_size)
     return filtered_data
 # 测量原始数据
-data = pd.read_csv('ThreePoints_Python\originaldata8.txt', header=None, delimiter='\t')
+data = pd.read_csv('ThreePoints_Python\Data\originaldata8.txt', header=None, delimiter='\t')
 s1 = data.iloc[:, 1].values
 s2 = data.iloc[:, 2].values
 s3 = data.iloc[:, 3].values
@@ -46,6 +46,12 @@ ax3 = fig.add_subplot(313)
 ax3.plot(s3[0:1000], label='Measurements')
 ax3.plot(filtered_s3[0:1000], label='Kalman filtered')
 plt.show()
+# 用seaborn画s1,s2,s3的折现图
+# sns.set(style="whitegrid")
+# sns.lineplot(x=np.arange(1, 10001), y=s1[0:10000], label='s1')
+# sns.lineplot(x=np.arange(1, 10001), y=s2[0:10000], label='s2')
+# sns.lineplot(x=np.arange(1, 10001), y=s3[0:10000], label='s3')
+# plt.show()
 # 输出到文件
-df = pd.DataFrame({'No': np.arange(1, 10001), 's1': filtered_s1, 's2': filtered_s2, 's3': filtered_s3})
-df.to_csv('ThreePoints_Python\Filtereddata8.csv', index=False)
+df = pd.DataFrame({'No': np.arange(1, 10001),'s1':s1,'s2':s2,'s3':s3,'filtered_s1': filtered_s1, 'filtered_s2': filtered_s2, 'filtered_s3': filtered_s3})
+df.to_csv('ThreePoints_Python\Data\Filtereddata8.csv', index=False)
