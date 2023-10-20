@@ -1,11 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 """
 Allan方差是一种用于分析时间序列数据的方法，可以用于确定数据的稳定性和噪声特性。
 如果Allan方差曲线呈现出平稳的趋势，说明数据在不同的时间间隔内的噪声特性比较一致，因此可以认为该信号稳定性好，噪声较低。
 但是需要注意的是，Allan方差曲线只能反映数据的噪声特性，不能反映数据的准确性。
 因此，在实际应用中，需要综合考虑数据的准确性和稳定性，以便更好地评估数据的质量。
 """
+# %% Allan方差计算
 def allan_variance(data, tau = 10):
     """
     计算Allan方差
@@ -28,11 +30,17 @@ def allan_variance(data, tau = 10):
         allan_var[m - 1] = sum_var
     return allan_var
 
-data = np.random.randn(1000)
+# data = np.random.randn(1000)
+# %%读取滤波后的数据
+df = pd.read_csv('ThreePoints_Python\Data\ThreePointsResultData.csv')
+data = df['x'].values
 tau = 10
 allan_var = allan_variance(data, tau)
 print(allan_var)
-# 绘制Allan方差曲线
+# %%输出到文件
+df = pd.DataFrame({'x': np.arange(1, len(allan_var) + 1) * tau ,'y': allan_var})
+df.to_csv('ThreePoints_Python\Data\AllanResultData.csv', index=False)
+# %%绘制Allan方差曲线
 """
 通常可以使用图形化的方式来表示Allan方差数组。
 常见的图形化表示方法是Allan方差曲线，其中横轴表示时间间隔，纵轴表示Allan方差的值。

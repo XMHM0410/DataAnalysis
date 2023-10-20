@@ -22,19 +22,40 @@ amp_i = amp[interest_freq_mask]
 # %%找到最大幅值及对应的频率
 max_amp = np.max(amp_i)
 max_amp_freq = freq_i[np.argmax(amp_i)]
-# %%按转速基频倍频分离同步误差和异步误差
+# %%按转速基频倍频分离同步误差和异步误
 bf = rpm/60 # 基频 Hz
-# bf_index = int(bf*(N/fs)) #转换成索引
 bf_index = np.where(freq == np.float64(bf))[0][0] #转换成索引
+# bf_index_range = 5 #去基频索引+-5个
+# bf_index_range_list = np.arange(bf_index - bf_index_range, bf_index + bf_index_range)
 Sync = fft_x.copy()
 Async = fft_x.copy()
 Sync[0] = 0 # 把频率为0的第一项去掉，相当于滤掉部分随机误差
 Async[0] = 0
+"""
 for i in range(len(freq_i)):
     if (i) % bf_index == 0:
         Async[i] = 0
     else:
         Sync[i] = 0
+"""
+for i in range(1,len(freq_i)):
+    if i % bf_index == 0: #倍频区间
+        #取sync[i]前后50个的最大值
+        # print(np.arange(i-50,i+50))
+        Sync[i] = max(Sync[i-50:i+50])
+        # Sync[i] = 0 
+        #Async[i]前后50个均置为0
+        Async[i-50:i+50] = 0
+        # Async[i] = 0      
+    # else: #非倍频区间
+for j in range(1,len(freq_i)):
+    if j % bf_index == 0: #倍频区间
+        pass
+    else:
+        Sync[j] = 0   
+for k in range(1,len(freq_i)):
+    if Async[k] <= 0.2:
+        Async[k] = 0
 # %%同步误差进一步分离圆度误差和偏心误差
 Rod = Sync.copy()
 Pos = Sync.copy()
@@ -55,3 +76,22 @@ Pos_amp = np.abs(Pos)
 df = pd.DataFrame({'x': x,'Sync': abs(Sync_sig), 'Async': abs(Async_sig), 'Rod': abs(Rod_sig), 'Pos': abs(Pos_sig)})
 df.to_csv('ThreePoints_Python\Data\Resultdata.csv', index=False)
 # %%误差绘图
+# 同步误差
+plt.figure(3)
+plt.plot(t[0:100],Sync_sig[0:100])
+plt.title('Sync')
+# 同步误差频谱
+plt.figure(4)
+plt.stem(freq_i, Sync_amp[interest_freq_mask])
+plt.title('Sync_freq')
+
+# 异步误差
+plt.figure(5)
+plt.plot(t[0:100],Async_sig[0:100])
+plt.title('Async')
+
+# 异步误差频谱
+plt.figure(6)
+plt.stem(freq_i, Async_amp[interest_freq_mask])
+plt.title('Async_freq')
+plt.show()
