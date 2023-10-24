@@ -22,6 +22,13 @@ amp_i = amp[interest_freq_mask]
 # %%找到最大幅值及对应的频率
 max_amp = np.max(amp_i)
 max_amp_freq = freq_i[np.argmax(amp_i)]
+# %%绘制原始信号频谱幅值谱
+plt.figure(2)
+# plt.stem(freq[:len(freq)//2], amp[:len(amp)//2])
+plt.stem(freq_i, amp_i)
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Amplitude')
+plt.title('Amplitude Spectrum')
 # %%按转速基频倍频分离同步误差和异步误
 bf = rpm/60 # 基频 Hz
 bf_index = np.where(freq == np.float64(bf))[0][0] #转换成索引
@@ -54,7 +61,7 @@ for j in range(1,len(freq_i)):
     else:
         Sync[j] = 0   
 for k in range(1,len(freq_i)):
-    if Async[k] <= 0.2:
+    if Async[k] <= 0.2:#滤掉0.2以下的
         Async[k] = 0
 # %%同步误差进一步分离圆度误差和偏心误差
 Rod = Sync.copy()
@@ -73,23 +80,23 @@ Async_amp = np.abs(Async)
 Rod_amp = np.abs(Rod)
 Pos_amp = np.abs(Pos)
 # %%输出到文件
-df = pd.DataFrame({'x': x,'Sync': abs(Sync_sig), 'Async': abs(Async_sig), 'Rod': abs(Rod_sig), 'Pos': abs(Pos_sig)})
-df.to_csv('ThreePoints_Python\Data\Resultdata.csv', index=False)
+df1 = pd.DataFrame({'t':t,'x': x,'Sync': np.real(Sync_sig), 'Async': np.real(Async_sig), 'Rod': np.real(Rod_sig), 'Pos': np.real(Pos_sig)})
+df1.to_csv('ThreePoints_Python\Data\SyncAndAsyncData.csv', index=False)
+df2 = pd.DataFrame({'freq_i':freq_i,'sync_amp':Sync_amp[interest_freq_mask],'async_amp':Async_amp[interest_freq_mask]})
+df2.to_csv('ThreePoints_Python\Data\SyncAndAsyncAmpData.csv', index=False)
 # %%误差绘图
 # 同步误差
 plt.figure(3)
-plt.plot(t[0:100],Sync_sig[0:100])
+plt.plot(t[0:1000],Sync_sig[0:1000])
 plt.title('Sync')
 # 同步误差频谱
 plt.figure(4)
 plt.stem(freq_i, Sync_amp[interest_freq_mask])
 plt.title('Sync_freq')
-
 # 异步误差
 plt.figure(5)
-plt.plot(t[0:100],Async_sig[0:100])
+plt.plot(t[0:1000],Async_sig[0:1000])
 plt.title('Async')
-
 # 异步误差频谱
 plt.figure(6)
 plt.stem(freq_i, Async_amp[interest_freq_mask])
