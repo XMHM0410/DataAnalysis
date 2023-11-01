@@ -1,12 +1,7 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
-"""
-Allan方差是一种用于分析时间序列数据的方法，可以用于确定数据的稳定性和噪声特性。
-如果Allan方差曲线呈现出平稳的趋势，说明数据在不同的时间间隔内的噪声特性比较一致，因此可以认为该信号稳定性好，噪声较低。
-但是需要注意的是，Allan方差曲线只能反映数据的噪声特性，不能反映数据的准确性。
-因此，在实际应用中，需要综合考虑数据的准确性和稳定性，以便更好地评估数据的质量。
-"""
+import matplotlib.pyplot as plt
+
 # %% Allan方差计算
 def allan_variance(data, tau = 10):
     """
@@ -30,26 +25,33 @@ def allan_variance(data, tau = 10):
         allan_var[m - 1] = sum_var
     return allan_var
 
-# data = np.random.randn(1000)
-# %%读取滤波后的数据
-df = pd.read_csv('ThreePoints_Python\Data\ThreePointsResultData.csv')
-data = df['x'].values
+# %%读文件
+df1 = pd.read_csv('ThreePoints_Python\Data\SyncAndAsyncData.csv')
+sync = df1['Sync'].values
+Async = df1['Async'].values
+df2 = pd.read_csv('ThreePoints_Python\Data\denoiceResultData.csv')
+x = df2['x'].values
+t = df2['t'].values
+sync_kalman = df2['sync_kalman'].values
+async_kalman = df2['async_kalman'].values
+sync_wavelet = df2['sync_wavelet'].values
+async_wavelet = df2['async_wavelet'].values
+# sync_LSTMGRU = df2['sync_LSTMGRU'].values
+# async_LSTMGRU = df2['async_LSTMGRU'].values
+sync_average = df2['sync_average'].values
+async_average = df2['async_average'].values
+# %%确定参数
 tau = 10
-allan_var = allan_variance(data, tau)
-print(allan_var)
-# %%输出到文件
-df = pd.DataFrame({'x': np.arange(1, len(allan_var) + 1) * tau ,'y': allan_var})
-df.to_csv('ThreePoints_Python\Data\AllanResultData.csv', index=False)
-# %%绘制Allan方差曲线
-"""
-通常可以使用图形化的方式来表示Allan方差数组。
-常见的图形化表示方法是Allan方差曲线，其中横轴表示时间间隔，纵轴表示Allan方差的值。
-通过绘制Allan方差曲线，可以更直观地观察数据的稳定性和噪声特性。
-例如，如果Allan方差曲线呈现出明显的趋势或周期性变化，则说明数据存在明显的噪声或漂移。
-相反，如果Allan方差曲线呈现出平稳的趋势，则说明数据比较稳定。
-"""
-plt.loglog(np.arange(1, len(allan_var) + 1) * tau, allan_var)
-plt.xlabel('Time Interval (s)')
-plt.ylabel('Allan Variance')
-plt.title('Allan Variance Curve')
-plt.show()
+# %%计算分离结果同步异步误差allan方差
+sync_allan_var = allan_variance(sync, tau)
+sync_x= np.arange(1, len(sync_allan_var) + 1) * tau
+async_allan_var = allan_variance(Async, tau)
+async_x = np.arange(1, len(async_allan_var) + 1) * tau
+# %%文件输出
+df_out = pd.DataFrame({
+                   'sync_x': sync_x,
+                   'sync_allan_var': sync_allan_var,
+                   'async_x': async_x,
+                   'async_allan_var': async_allan_var,
+                   })
+df_out.to_csv('ThreePoints_Python\Data\AllanResultData.csv',index=False)
