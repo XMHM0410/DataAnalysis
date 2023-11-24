@@ -47,11 +47,38 @@ sync_allan_var = allan_variance(sync, tau)
 sync_x= np.arange(1, len(sync_allan_var) + 1) * tau
 async_allan_var = allan_variance(Async, tau)
 async_x = np.arange(1, len(async_allan_var) + 1) * tau
+# %%卡尔曼滤波后的同步异步误差allan方差
+sync_kalman_allan_var = allan_variance(sync_kalman, tau)
+sync_kalman_x= np.arange(1, len(sync_kalman_allan_var) + 1) * tau
+async_kalman_allan_var = allan_variance(async_kalman, tau)
+async_kalman_x = np.arange(1, len(async_kalman_allan_var) + 1) * tau
+# %%小波降噪后的同步异步误差allan方差
+sync_wavelet_allan_var = allan_variance(sync_wavelet, tau)
+sync_wavelet_x= np.arange(1, len(sync_wavelet_allan_var) + 1) * tau
+async_wavelet_allan_var = allan_variance(async_wavelet, tau)
+async_wavelet_x = np.arange(1, len(async_wavelet_allan_var) + 1) * tau
+# %%集合平均后的同步异步误差allan方差
+sync_average_allan_var = allan_variance(sync_average, tau)
+sync_average_x= np.arange(1, len(sync_average_allan_var) + 1) * tau
+async_average_allan_var = allan_variance(async_average, tau)
+async_average_x = np.arange(1, len(async_average_allan_var) + 1) * tau
 # %%文件输出
 df_out = pd.DataFrame({
                    'sync_x': sync_x,
                    'sync_allan_var': sync_allan_var,
                    'async_x': async_x,
                    'async_allan_var': async_allan_var,
+                   'sync_kalman_x': sync_kalman_x,
+                   'sync_kalman_allan_var': sync_kalman_allan_var,
+                   'async_kalman_x': async_kalman_x,
+                   'async_kalman_allan_var': async_kalman_allan_var,
+                   'sync_wavelet_x': sync_wavelet_x,
+                   'sync_wavelet_allan_var': sync_wavelet_allan_var,
+                   'async_wavelet_x': async_wavelet_x,
+                   'async_wavelet_allan_var': async_wavelet_allan_var,
+                   'sync_average_x': sync_average_x,
+                   'sync_average_allan_var': sync_average_allan_var,
+                   'async_average_x': async_average_x,
+                   'async_average_allan_var': async_average_allan_var,
                    })
 df_out.to_csv('ThreePoints_Python\Data\AllanResultData.csv',index=False)

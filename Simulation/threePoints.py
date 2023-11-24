@@ -1,9 +1,8 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
 # %%读取滤波后的数据
-df = pd.read_csv('ThreePoints_Python\Data\Filtereddata8.csv')
+df = pd.read_csv('Simulation\Data\simSignal.csv')
 s1 = df['filtered_s1'].values
 s2 = df['filtered_s2'].values
 s3 = df['filtered_s3'].values
