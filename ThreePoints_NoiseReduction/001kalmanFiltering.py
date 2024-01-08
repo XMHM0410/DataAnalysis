@@ -12,7 +12,7 @@ kf.P *= 1000.  # 协方差矩阵初始化
 kf.R = 5       # 测量噪声协方差矩阵
 
 # 测量原始数据
-data = pd.read_csv('ThreePoints_Python\originaldata8.txt', header=None, delimiter='\t')
+data = pd.read_csv('ThreePoints_NoiseReduction\originaldata8.txt', header=None, delimiter='\t')
 s1 = data.iloc[:, 1].values
 s2 = data.iloc[:, 2].values
 s3 = data.iloc[:, 3].values
@@ -57,4 +57,4 @@ ax3.plot(filtered_s3[0:100], label='Kalman filtered')
 plt.show()
 # 输出到文件
 df = pd.DataFrame({'No': np.arange(1, 10001), 's1': filtered_s1, 's2': filtered_s2, 's3': filtered_s3})
-df.to_csv('ThreePoints_Python\Filtereddata8.csv', index=False)
+df.to_csv('ThreePoints_NoiseReduction\Filtereddata8.csv', index=False)

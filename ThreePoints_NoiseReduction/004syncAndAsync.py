@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 # %%读取滤波后的数据
-df = pd.read_csv('ThreePoints_Python\Data\ThreePointsResultData.csv')
+df = pd.read_csv('ThreePoints_NoiseReduction\Data\ThreePointsResultData.csv')
 x = df['x'].values
 # %%定义基本参数
 rpm = 6000 # 转速
@@ -81,9 +81,9 @@ Rod_amp = np.abs(Rod)
 Pos_amp = np.abs(Pos)
 # %%输出到文件
 df1 = pd.DataFrame({'t':t,'x': x,'Sync': np.real(Sync_sig), 'Async': np.real(Async_sig), 'Rod': np.real(Rod_sig), 'Pos': np.real(Pos_sig)})
-df1.to_csv('ThreePoints_Python\Data\SyncAndAsyncData.csv', index=False)
+df1.to_csv('ThreePoints_NoiseReduction\Data\SyncAndAsyncData.csv', index=False)
 df2 = pd.DataFrame({'freq_i':freq_i,'sync_amp':Sync_amp[interest_freq_mask],'async_amp':Async_amp[interest_freq_mask]})
-df2.to_csv('ThreePoints_Python\Data\SyncAndAsyncAmpData.csv', index=False)
+df2.to_csv('ThreePoints_NoiseReduction\Data\SyncAndAsyncAmpData.csv', index=False)
 # %%误差绘图
 # 同步误差
 plt.figure(3)

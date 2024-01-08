@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from noisefiltering import lstmgru,wavelet,kalman,average
 
 # %%读取同步异步误差
-df = pd.read_csv('ThreePoints_Python\Data\SyncAndAsyncData.csv')
+df = pd.read_csv('ThreePoints_NoiseReduction\Data\SyncAndAsyncData.csv')
 sync = df['Sync'].values
 Async = df['Async'].values
 t = df['t'].values
@@ -37,4 +37,4 @@ df_out = pd.DataFrame({'x': x,
                    'sync_average': sync_average,
                    'async_average': async_average
                    })
-df_out.to_csv('ThreePoints_Python\Data\denoiceResultData.csv',index=False)
+df_out.to_csv('ThreePoints_NoiseReduction\Data\denoiceResultData.csv',index=False)

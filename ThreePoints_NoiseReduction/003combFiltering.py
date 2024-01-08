@@ -6,5 +6,5 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # %%读取滤波后的数据
-df = pd.read_csv('ThreePoints_Python\Data\ThreePointsResultData.csv')
+df = pd.read_csv('ThreePoints_NoiseReduction\Data\ThreePointsResultData.csv')
 x = df['x'].values

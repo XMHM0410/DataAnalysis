@@ -2,10 +2,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 # %%读文件
-df1 = pd.read_csv('ThreePoints_Python\Data\SyncAndAsyncData.csv')
+df1 = pd.read_csv('ThreePoints_NoiseReduction\Data\SyncAndAsyncData.csv')
 sync = df1['Sync'].values
 Async = df1['Async'].values
-df2 = pd.read_csv('ThreePoints_Python\Data\denoiceResultData.csv')
+df2 = pd.read_csv('ThreePoints_NoiseReduction\Data\denoiceResultData.csv')
 x = df2['x'].values
 t = df2['t'].values
 sync_kalman = df2['sync_kalman'].values
@@ -47,4 +47,4 @@ print(async_wavelet_max,async_wavelet_min)
 df3 = pd.DataFrame({
     "deg":deg,
 })
-df3.to_csv('ThreePoints_Python\Data\ErrorCircle.csv',index=False)
+df3.to_csv('ThreePoints_NoiseReduction\Data\ErrorCircle.csv',index=False)

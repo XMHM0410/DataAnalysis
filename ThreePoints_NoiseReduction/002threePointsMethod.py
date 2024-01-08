@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # %%读取滤波后的数据
-df = pd.read_csv('ThreePoints_Python\Data\Filtereddata8.csv')
+df = pd.read_csv('ThreePoints_NoiseReduction\Data\Filtereddata8.csv')
 s1 = df['filtered_s1'].values
 s2 = df['filtered_s2'].values
 s3 = df['filtered_s3'].values
@@ -50,6 +50,6 @@ plt.title('Amplitude Spectrum')
 plt.show()
 # %%输出到文件
 df = pd.DataFrame({'x': x})
-df.to_csv('ThreePoints_Python\Data\ThreePointsResultData.csv', index=False)
+df.to_csv('ThreePoints_NoiseReduction\Data\ThreePointsResultData.csv', index=False)
 df = pd.DataFrame({'freq': freq, 'amp': amp})
-df.to_csv('ThreePoints_Python\Data\ThreePointsResultFreqAmp.csv', index=False)
+df.to_csv('ThreePoints_NoiseReduction\Data\ThreePointsResultFreqAmp.csv', index=False)

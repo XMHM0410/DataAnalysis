@@ -5,11 +5,11 @@ from noisefiltering import wavelet,kalman,average
 from allan import allan
 # %%读文件
 # 同步异步误差分离数据
-df1 = pd.read_csv('ThreePoints_Python\Data\SyncAndAsyncData.csv')
+df1 = pd.read_csv('ThreePoints_NoiseReduction\Data\SyncAndAsyncData.csv')
 sync = df1['Sync'].values
 Async = df1['Async'].values
 # 读取小波阈值降噪结果
-df2 = pd.read_csv('ThreePoints_Python\Data\denoiceResultData.csv')
+df2 = pd.read_csv('ThreePoints_NoiseReduction\Data\denoiceResultData.csv')
 x = df2['x'].values
 t = df2['t'].values
 sync_wavelet = df2['sync_wavelet'].values
@@ -38,11 +38,11 @@ df_out1 = pd.DataFrame({
                     'sync_wavelet2': sync_wavelet2,
                     'async_wavelet2': async_wavelet2
 })
-df_out1.to_csv('ThreePoints_Python\Data\AddDenoiseData.csv',index=False)
+df_out1.to_csv('ThreePoints_NoiseReduction\Data\AddDenoiseData.csv',index=False)
 df_out2 = pd.DataFrame({
                    'sync_wavelet2_x': sync_wavelet2_x,
                    'sync_wavelet2_allan_var': sync_wavelet2_allan_var,
                    'async_wavelet2_x': async_wavelet2_x,
                    'async_wavelet2_allan_var': async_wavelet2_allan_var,
                    })
-df_out2.to_csv('ThreePoints_Python\Data\AddAllanResultData.csv',index=False)
+df_out2.to_csv('ThreePoints_NoiseReduction\Data\AddAllanResultData.csv',index=False)

@@ -26,10 +26,10 @@ def allan_variance(data, tau = 10):
     return allan_var
 
 # %%读文件
-df1 = pd.read_csv('ThreePoints_Python\Data\SyncAndAsyncData.csv')
+df1 = pd.read_csv('ThreePoints_NoiseReduction\Data\SyncAndAsyncData.csv')
 sync = df1['Sync'].values
 Async = df1['Async'].values
-df2 = pd.read_csv('ThreePoints_Python\Data\denoiceResultData.csv')
+df2 = pd.read_csv('ThreePoints_NoiseReduction\Data\denoiceResultData.csv')
 x = df2['x'].values
 t = df2['t'].values
 sync_kalman = df2['sync_kalman'].values
@@ -81,4 +81,4 @@ df_out = pd.DataFrame({
                    'async_average_x': async_average_x,
                    'async_average_allan_var': async_average_allan_var,
                    })
-df_out.to_csv('ThreePoints_Python\Data\AllanResultData.csv',index=False)
+df_out.to_csv('ThreePoints_NoiseReduction\Data\AllanResultData.csv',index=False)

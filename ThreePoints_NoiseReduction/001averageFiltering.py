@@ -15,7 +15,7 @@ def average_filter(data, window_size):
             filtered_data.append(sum(data[i-window_size+1:i+1]) / window_size)
     return filtered_data
 # 测量原始数据
-data = pd.read_csv('ThreePoints_Python\Data\originaldata8.txt', header=None, delimiter='\t')
+data = pd.read_csv('ThreePoints_NoiseReduction\Data\originaldata8.txt', header=None, delimiter='\t')
 s1 = data.iloc[:, 1].values
 s2 = data.iloc[:, 2].values
 s3 = data.iloc[:, 3].values
@@ -54,4 +54,4 @@ plt.show()
 # plt.show()
 # 输出到文件
 df = pd.DataFrame({'No': np.arange(1, 10001),'s1':s1,'s2':s2,'s3':s3,'filtered_s1': filtered_s1, 'filtered_s2': filtered_s2, 'filtered_s3': filtered_s3})
-df.to_csv('ThreePoints_Python\Data\Filtereddata8.csv', index=False)
+df.to_csv('ThreePoints_NoiseReduction\Data\Filtereddata8.csv', index=False)
