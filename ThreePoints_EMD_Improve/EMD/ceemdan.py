@@ -8,9 +8,7 @@ def ceemdan_decompose(data):
     ceemdan = CEEMDAN()
     ceemdan.ceemdan(data)
     imfs, res = ceemdan.get_imfs_and_residue()
-    for i in range(imfs.shape[0]):
-        IImfs.append(imfs[i])
-    return IImfs, res
+    return imfs, res
 IImfs=[] # 全局变量 IImfs=[]
 # 生成res的分解
 def ceemdan_decompose_res(data):
