@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 # %% 测量原始数据
-data = pd.read_csv('ThreePoints_EMD_Improve\Data\9.txt', header=None, delimiter='\t')
+data = pd.read_csv('Data\9.txt', header=None, delimiter='\t')
 s1 = data.iloc[:, 1].values
 s2 = data.iloc[:, 2].values
 s3 = data.iloc[:, 3].values
