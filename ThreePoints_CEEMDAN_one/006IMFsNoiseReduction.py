@@ -4,10 +4,10 @@ import matplotlib.pyplot as plt
 from CanberraDistance import canberraDistance
 from NoiseReduction import kalman, wavelet
 # %%读文件中的imf1-10
-dfi1 = pd.read_csv('ThreePoints_CEEMDAN_one\Data\downSample\MixedSignal6.csv')
+dfi1 = pd.read_csv('ThreePoints_CEEMDAN_one\Data\MixedSignal.csv')
 S = dfi1["S"].values
 theta = dfi1["theta"].values
-dfi2 = pd.read_csv('ThreePoints_CEEMDAN_one\Data\IMFs6.csv')
+dfi2 = pd.read_csv('ThreePoints_CEEMDAN_one\Data\IMFs.csv')
 imf1 = dfi2["IMF1"].values
 imf2 = dfi2["IMF2"].values
 imf3 = dfi2["IMF3"].values
@@ -29,12 +29,11 @@ imf3_NR = kalman.Kalman_denoise(imf3)
 imf4_NR = wavelet.Wavelet_denoise(imf4)
 print(len(imf4_NR))
 # 去掉imf4_NR的最后一个
-imf4_NR = imf4_NR[:-1]
-print(len(imf4_NR))
+# imf4_NR = imf4_NR[:-1]
 imf5_NR = wavelet.Wavelet_denoise(imf5)
-imf5_NR = imf5_NR[:-1]
+# imf5_NR = imf5_NR[:-1]
 imf6_NR = wavelet.Wavelet_denoise(imf6)
-imf6_NR = imf6_NR[:-1]
+# imf6_NR = imf6_NR[:-1]
 # %%降噪结果导出
 out = pd.DataFrame({'IMF1': imf1_NR,
                     'IMF2': imf2_NR, 

@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from CEEMDAN import ceemdan
 # %%读文件三点法混合信号
-df = pd.read_csv('ThreePoints_CEEMDAN_one\Data\downSample\MixedSignal6.csv')
+df = pd.read_csv('ThreePoints_CEEMDAN_one\Data\MixedSignal.csv')
 S = df["S"].values
 t = df["t"].values
 theta = df["theta"].values
@@ -17,4 +17,4 @@ for i in range(IImfs.shape[0]):
     output[f"IMF{i+1}"] = IImfs[i]
 # %%文件保存
 df1 = pd.DataFrame(output)
-df1.to_csv('ThreePoints_CEEMDAN_one\Data\IMFs6.csv', index=False)
+df1.to_csv('ThreePoints_CEEMDAN_one\Data\IMFs.csv', index=False)

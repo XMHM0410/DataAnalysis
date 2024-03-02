@@ -3,10 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from CanberraDistance import canberraDistance
 # %%读文件中的imf1-10
-dfi1 = pd.read_csv('ThreePoints_CEEMDAN_one\Data\downSample\MixedSignal6.csv')
+dfi1 = pd.read_csv('ThreePoints_CEEMDAN_one\Data\MixedSignal.csv')
 S = dfi1["S"].values
 theta = dfi1["theta"].values
-dfi2 = pd.read_csv('ThreePoints_CEEMDAN_one\Data\IMFs6.csv')
+dfi2 = pd.read_csv('ThreePoints_CEEMDAN_one\Data\IMFs.csv')
 imf1 = dfi2["IMF1"].values
 imf2 = dfi2["IMF2"].values
 imf3 = dfi2["IMF3"].values

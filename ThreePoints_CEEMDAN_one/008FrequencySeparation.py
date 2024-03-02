@@ -4,24 +4,20 @@ import matplotlib.pyplot as plt
 # %%读文件
 dfi1 = pd.read_csv('ThreePoints_CEEMDAN_one\Data\RebuildDignal.csv')
 S = dfi1["S"].values
-#去掉S中最后9各数
-S = S[:-9]
 S_rebuild = dfi1["S_rebuild"].values
-S_rebuild = S_rebuild[:-9]
 theta = dfi1["theta"].values
-theta = theta[:-9]
+t = dfi1["t"].values
 # %%定义基本参数
-rpm = 12000 # 转速
-N = len(S) # 采样总点数
-fs = 272000.0 # 采样频率 Hz
-t_total = N/fs
-t = np.arange(0,t_total,t_total/N)
+dfi2 = pd.read_csv('ThreePoints_CEEMDAN_one\Data\config.csv')
+fs = dfi2["fs"].values[0]
+rpm = dfi2["rpm"].values[0]
 # %%计算频谱
+N = len(S_rebuild)
 fft_x = np.fft.fft(S_rebuild)
 freq = np.fft.fftfreq(N, d=1/fs)
 amp = np.abs(fft_x)
 # %%选择感兴趣的频率范围
-interest_freq_range = (100.0, 4000.0)  # 单位为Hz
+interest_freq_range = (100.0, 68000.0)  # 单位为Hz
 interest_freq_mask = (freq >= interest_freq_range[0]) & (freq <= interest_freq_range[1])
 freq_i = freq[interest_freq_mask]
 amp_i = amp[interest_freq_mask]
@@ -37,7 +33,7 @@ plt.ylabel('Amplitude')
 plt.title('Amplitude Spectrum')
 plt.show()
 # %%按转速基频倍频分离同步误差和异步误
-bf = rpm/60 # 基频 Hz
+bf = rpm/60 *10 # 基频 Hz
 bf_index = np.where(freq == np.float64(bf))[0][0] #转换成索引
 # bf_index_range = 5 #去基频索引+-5个
 # bf_index_range_list = np.arange(bf_index - bf_index_range, bf_index + bf_index_range)
